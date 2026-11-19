@@ -44,3 +44,7 @@
 		fill: var(--tooltip-background-color);
 	}
 }
+
+[data-reka-popper-content-wrapper]:has(> .tooltip) {
+	pointer-events: none;
+}

@@ -332,7 +332,14 @@ function useFileUpload() {
 			notificationsStore.remove(dragNotificationID);
 		}
 
-		const files = Array.from(event.dataTransfer.files).filter((file) => file.type);
+		// Folders show up as typeless files, but regular files can be typeless too (unknown extensions)
+		const items = Array.from(event.dataTransfer.items ?? []);
+
+		const files = Array.from(event.dataTransfer.files).filter((file, index) => {
+			if (file.type) return true;
+			const entry = items[index]?.webkitGetAsEntry?.();
+			return !entry?.isDirectory;
+		});
 
 		fileUploadNotificationID = notificationsStore.add({
 			title: t(
